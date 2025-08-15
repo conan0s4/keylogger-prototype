@@ -1,7 +1,0 @@
-issue: multitasking
-possible solution: multithreading
-
-
-send function (works fine)
-listener function (works fine)
-logging(works fine)
